@@ -1,5 +1,11 @@
 const CACHE_NAME = 'planner-v1';
-const urlsToCache = ['planner.html', 'manifest.json'];
+const urlsToCache = [
+  './',
+  './planner.html',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png'
+];
 
 self.addEventListener('install', event => {
   event.waitUntil(
