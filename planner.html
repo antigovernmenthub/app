@@ -30,10 +30,25 @@
       --accent: #4f46e5;
       --accent-soft: rgba(79, 70, 229, 0.15);
       --danger: #ef4444;
+      --danger-soft: rgba(127, 29, 29, 0.6);
       --text-main: #e5e7eb;
       --text-soft: #9ca3af;
       --radius-lg: 18px;
       --radius-sm: 10px;
+      --shadow-strong: 0 18px 40px rgba(15, 23, 42, 0.8);
+    }
+
+    :root[data-theme="light"] {
+      --bg: #f3f4f6;
+      --card: #ffffff;
+      --card-light: #f9fafb;
+      --accent: #4f46e5;
+      --accent-soft: rgba(79, 70, 229, 0.08);
+      --danger: #b91c1c;
+      --danger-soft: rgba(248, 113, 113, 0.3);
+      --text-main: #111827;
+      --text-soft: #6b7280;
+      --shadow-strong: 0 10px 25px rgba(148, 163, 184, 0.55);
     }
 
     * {
@@ -44,7 +59,7 @@
 
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
+      background: radial-gradient(circle at top, #1f2937 0, var(--bg) 55%);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
@@ -61,12 +76,16 @@
     .shell {
       background: rgba(15, 23, 42, 0.92);
       border-radius: 24px;
-      border: 1px solid rgba(148, 163, 184, 0.2);
-      box-shadow:
-        0 18px 40px rgba(15, 23, 42, 0.8),
-        0 0 0 1px rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: var(--shadow-strong);
       padding: 16px 14px 18px;
       backdrop-filter: blur(20px);
+    }
+
+    :root[data-theme="light"] .shell {
+      background: rgba(255, 255, 255, 0.98);
+      border-color: rgba(209, 213, 219, 0.9);
+      backdrop-filter: none;
     }
 
     .header {
@@ -112,9 +131,37 @@
       font-size: 0.7rem;
       padding: 4px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
+      border: 1px solid rgba(148, 163, 184, 0.6);
       background: radial-gradient(circle at top left, #1f2937, #020617);
       color: var(--text-soft);
+    }
+
+    :root[data-theme="light"] .pill {
+      background: #f9fafb;
+      border-color: #e5e7eb;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .theme-toggle {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: var(--card-light);
+      padding: 3px 8px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-soft);
+    }
+
+    .theme-toggle span {
+      font-size: 0.9rem;
     }
 
     .input-card {
@@ -123,7 +170,11 @@
       padding: 12px 12px 10px;
       border: 1px solid rgba(148, 163, 184, 0.25);
       box-shadow: 0 8px 18px rgba(15, 23, 42, 0.6);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+    }
+
+    :root[data-theme="light"] .input-card {
+      box-shadow: 0 10px 24px rgba(148, 163, 184, 0.45);
     }
 
     .input-label {
@@ -150,7 +201,8 @@
     }
 
     input[type="text"],
-    input[type="date"] {
+    input[type="date"],
+    .class-input {
       padding: 9px 11px;
       border-radius: var(--radius-sm);
       border: 1px solid rgba(148, 163, 184, 0.35);
@@ -161,11 +213,19 @@
       width: 100%;
     }
 
+    :root[data-theme="light"] input[type="text"],
+    :root[data-theme="light"] input[type="date"],
+    :root[data-theme="light"] .class-input {
+      background: #f9fafb;
+      border-color: #e5e7eb;
+    }
+
     input::placeholder {
       color: rgba(148, 163, 184, 0.85);
     }
 
-    input:focus {
+    input:focus,
+    .class-input:focus {
       border-color: rgba(129, 140, 248, 0.9);
       box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.75);
     }
@@ -173,6 +233,10 @@
     input[type="date"] {
       font-size: 0.8rem;
       color-scheme: dark;
+    }
+
+    :root[data-theme="light"] input[type="date"] {
+      color-scheme: light;
     }
 
     .add-btn {
@@ -194,6 +258,55 @@
     .add-btn:active {
       transform: translateY(1px);
       box-shadow: 0 3px 10px rgba(79, 70, 229, 0.4);
+    }
+
+    .class-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .class-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .class-chip {
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-soft);
+      cursor: pointer;
+    }
+
+    .class-chip.selected {
+      background: rgba(79, 70, 229, 0.15);
+      color: #c7d2fe;
+      border-color: #4f46e5;
+    }
+
+    :root[data-theme="light"] .class-chip {
+      background: #f9fafb;
+    }
+
+    .class-add-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .class-add-btn {
+      font-size: 0.75rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px dashed rgba(148, 163, 184, 0.6);
+      background: transparent;
+      color: var(--text-soft);
+      cursor: pointer;
+      white-space: nowrap;
     }
 
     .meta-row {
@@ -224,6 +337,12 @@
       cursor: pointer;
     }
 
+    :root[data-theme="light"] .clear-btn {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #fecaca;
+    }
+
     .list-card {
       background: var(--card-light);
       border-radius: var(--radius-lg);
@@ -233,6 +352,10 @@
       scrollbar-width: thin;
       scrollbar-color: rgba(55, 65, 81, 0.9) transparent;
       padding-bottom: 4px;
+    }
+
+    :root[data-theme="light"] .list-card {
+      border-color: #e5e7eb;
     }
 
     .list-card::-webkit-scrollbar {
@@ -267,17 +390,24 @@
       list-style: none;
     }
 
-    li {
+    li.task-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
       padding: 9px 12px;
       border-bottom: 1px solid rgba(55, 65, 81, 0.7);
+      opacity: 0;
+      transform: translateY(4px);
+      animation: taskFadeIn 160ms ease-out forwards;
     }
 
-    .section ul:empty + .section-empty {
-      display: block;
+    :root[data-theme="light"] li.task-item {
+      border-bottom-color: #e5e7eb;
+    }
+
+    li.task-item:last-child {
+      border-bottom: none;
     }
 
     .section-empty {
@@ -287,8 +417,8 @@
       color: rgba(148, 163, 184, 0.9);
     }
 
-    li:last-child {
-      border-bottom: none;
+    .section ul:empty + .section-empty {
+      display: block;
     }
 
     .task-main {
@@ -334,17 +464,43 @@
       color: rgba(156, 163, 175, 0.85);
     }
 
-    .task-date {
+    .task-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       font-size: 0.75rem;
+    }
+
+    .task-date {
       color: var(--text-soft);
     }
 
     .task-date.overdue {
       color: #fecaca;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .task-date.overdue::before {
+      content: "⚠ ";
     }
 
     .task-date.soon {
       color: #facc15;
+      font-weight: 500;
+    }
+
+    .class-pill {
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      background: rgba(59, 130, 246, 0.18);
+      color: #bfdbfe;
+    }
+
+    :root[data-theme="light"] .class-pill {
+      background: #dbeafe;
+      color: #1d4ed8;
     }
 
     .task-controls {
@@ -377,6 +533,33 @@
       font-size: 0.8rem;
     }
 
+    :root[data-theme="light"] .delete-btn {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .task-item.overdue-row {
+      border-left: 4px solid var(--danger);
+      background: var(--danger-soft);
+    }
+
+    :root[data-theme="light"] .task-item.overdue-row {
+      background: #fee2e2;
+    }
+
+    .task-item.removing {
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 150ms ease, transform 150ms ease;
+    }
+
+    @keyframes taskFadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     .footer-hint {
       margin-top: 10px;
       text-align: center;
@@ -407,9 +590,15 @@
             <div class="app-dot"></div>
             <h1>Homework planner</h1>
           </div>
-          <span class="subtitle">Type the assignment, pick the due date, done.</span>
+          <span class="subtitle">Assignments, dates, and classes in one view.</span>
         </div>
-        <div class="pill">PWA • offline ready</div>
+        <div class="header-right">
+          <button class="theme-toggle" id="themeToggle">
+            <span id="themeIcon">☾</span>
+            <span id="themeLabel">Dark</span>
+          </button>
+          <div class="pill">PWA • offline ready</div>
+        </div>
       </header>
 
       <section class="input-card">
@@ -420,6 +609,15 @@
             <button class="add-btn" onclick="addTask()">Add</button>
           </div>
           <input id="dueInput" type="date" />
+          <div class="class-bar">
+            <div class="class-chips" id="classChips">
+              <!-- dynamic class chips -->
+            </div>
+            <div class="class-add-row">
+              <input id="classInput" class="class-input" type="text" placeholder="Add a class (Algebra, English...)" />
+              <button class="class-add-btn" onclick="addClass()">+ Add class</button>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -454,7 +652,7 @@
         <!-- Upcoming -->
         <div class="section" id="section-upcoming">
           <div class="section-header">
-            <span>Upcoming</span>
+            <span>Upcoming / No date</span>
             <span id="upcomingCount">0</span>
           </div>
           <ul id="list-upcoming"></ul>
@@ -462,12 +660,42 @@
         </div>
       </section>
 
-      <p class="footer-hint">Tip: leave date blank for “sometime soon” – it will land in Upcoming.</p>
+      <p class="footer-hint">Overdue tasks glow red so you can’t ignore them.</p>
     </div>
   </div>
 
   <script>
-    let tasks = JSON.parse(localStorage.getItem('planner-tasks-v2')) || [];
+    // theme
+    const root = document.documentElement;
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeLabel = document.getElementById('themeLabel');
+
+    function applyTheme(theme) {
+      root.dataset.theme = theme;
+      localStorage.setItem('planner-theme', theme);
+      if (theme === 'light') {
+        themeIcon.textContent = '☀';
+        themeLabel.textContent = 'Light';
+      } else {
+        themeIcon.textContent = '☾';
+        themeLabel.textContent = 'Dark';
+      }
+    }
+
+    const savedTheme = localStorage.getItem('planner-theme') || 'dark';
+    applyTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+    });
+
+    // data
+    let tasks = JSON.parse(localStorage.getItem('planner-tasks-v3')) || [];
+    let classes = JSON.parse(localStorage.getItem('planner-classes')) || [];
+    let selectedClassId = null;
+
     const taskInput = document.getElementById('taskInput');
     const dueInput = document.getElementById('dueInput');
     const taskCount = document.getElementById('taskCount');
@@ -478,6 +706,9 @@
     const todayCount = document.getElementById('todayCount');
     const tomorrowCount = document.getElementById('tomorrowCount');
     const upcomingCount = document.getElementById('upcomingCount');
+
+    const classChips = document.getElementById('classChips');
+    const classInput = document.getElementById('classInput');
 
     function toDateOnlyString(date) {
       return date.toISOString().slice(0, 10);
@@ -493,7 +724,7 @@
     }
 
     function getDateBadge(taskDateStr) {
-      if (!taskDateStr) return { label: 'No date', className: '' };
+      if (!taskDateStr) return { label: 'No date set', className: '' };
 
       const { todayStr, tomorrowStr } = getTodayTomorrow();
       const today = new Date(todayStr);
@@ -502,8 +733,32 @@
 
       if (taskDateStr === todayStr) return { label: 'Due today', className: 'soon' };
       if (taskDateStr === tomorrowStr) return { label: 'Due tomorrow', className: 'soon' };
-      if (diffDays < 0) return { label: 'Past due', className: 'overdue' };
+      if (diffDays < 0) return { label: 'PAST DUE', className: 'overdue' };
       return { label: `Due ${taskDateStr}`, className: '' };
+    }
+
+    function getClassById(id) {
+      return classes.find(c => c.id === id) || null;
+    }
+
+    function renderClasses() {
+      classChips.innerHTML = '';
+      classes.forEach(cls => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'class-chip' + (cls.id === selectedClassId ? ' selected' : '');
+        chip.textContent = cls.name;
+        chip.onclick = () => {
+          selectedClassId = cls.id === selectedClassId ? null : cls.id;
+          renderClasses();
+        };
+        classChips.appendChild(chip);
+      });
+    }
+
+    function saveAll() {
+      localStorage.setItem('planner-tasks-v3', JSON.stringify(tasks));
+      localStorage.setItem('planner-classes', JSON.stringify(classes));
     }
 
     function renderTasks() {
@@ -517,9 +772,15 @@
 
       tasks.forEach((task, index) => {
         const li = document.createElement('li');
+        li.className = 'task-item';
 
         const badge = getDateBadge(task.due || null);
         const statusClass = task.completed ? 'inactive' : 'active';
+        const cls = task.classId ? getClassById(task.classId) : null;
+
+        if (badge.className === 'overdue' && !task.completed) {
+          li.classList.add('overdue-row');
+        }
 
         li.innerHTML = `
           <div class="task-main">
@@ -527,7 +788,10 @@
               <span class="status-dot ${statusClass}"></span>
               <span class="task-text ${task.completed ? 'completed' : ''}">${task.text}</span>
             </div>
-            <span class="task-date ${badge.className}">${badge.label}</span>
+            <div class="task-meta-row">
+              <span class="task-date ${badge.className}">${badge.label}</span>
+              ${cls ? `<span class="class-pill">${cls.name}</span>` : ''}
+            </div>
           </div>
           <div class="task-controls">
             <label>
@@ -557,19 +821,24 @@
       tomorrowCount.textContent = tomorrowNum;
       upcomingCount.textContent = upcomingNum;
 
-      localStorage.setItem('planner-tasks-v2', JSON.stringify(tasks));
+      saveAll();
     }
 
     function addTask() {
       const text = taskInput.value.trim();
       const due = dueInput.value.trim(); // yyyy-mm-dd or empty
+      if (!text) return;
 
-      if (text) {
-        tasks.unshift({ text, completed: false, due: due || null });
-        taskInput.value = '';
-        dueInput.value = '';
-        renderTasks();
-      }
+      tasks.unshift({
+        text,
+        completed: false,
+        due: due || null,
+        classId: selectedClassId
+      });
+
+      taskInput.value = '';
+      dueInput.value = '';
+      renderTasks();
     }
 
     function toggleTask(index) {
@@ -578,8 +847,19 @@
     }
 
     function deleteTask(index) {
-      tasks.splice(index, 1);
-      renderTasks();
+      // fade-out animation before removing
+      const allLis = document.querySelectorAll('li.task-item');
+      const li = allLis[index];
+      if (li) {
+        li.classList.add('removing');
+        setTimeout(() => {
+          tasks.splice(index, 1);
+          renderTasks();
+        }, 150);
+      } else {
+        tasks.splice(index, 1);
+        renderTasks();
+      }
     }
 
     function clearCompleted() {
@@ -587,12 +867,25 @@
       renderTasks();
     }
 
+    function addClass() {
+      const name = classInput.value.trim();
+      if (!name) return;
+      const id = Date.now().toString();
+      classes.push({ id, name });
+      classInput.value = '';
+      selectedClassId = id;
+      renderClasses();
+      saveAll();
+    }
+
+    // events
     taskInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') addTask();
     });
 
     window.addEventListener('load', () => {
       taskInput.focus();
+      renderClasses();
       renderTasks();
     });
   </script>
