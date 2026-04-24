@@ -4,22 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Homework Planner</title>
-  <!-- PWA Manifest & Service Worker -->
-  <link rel="manifest" href="manifest.json">
+
+  <!-- PWA Manifest & Icons -->
+  <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#4a90e2">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Planner">
-  <link rel="apple-touch-icon" href="icon-512.png">
+  <link rel="apple-touch-icon" href="./icon-512.png">
+
+  <!-- Service Worker Registration -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-          .then(reg => console.log('SW registered'))
-          .catch(err => console.log('SW failed'));
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('SW registered', reg.scope))
+          .catch(err => console.log('SW failed', err));
       });
     }
   </script>
+
   <style>
     body { 
       font-family: Arial, sans-serif; 
@@ -57,7 +61,11 @@
       text-decoration: line-through; 
       opacity: 0.6; 
     }
-    .delete-btn { background: #ff6b6b; width: auto; padding: 5px 10px; }
+    .delete-btn { 
+      background: #ff6b6b; 
+      width: auto; 
+      padding: 5px 10px; 
+    }
     .clear-btn { background: #ffaa00; }
     @media (max-width: 480px) { body { padding: 10px; } }
   </style>
@@ -94,7 +102,7 @@
     function addTask() {
       const text = taskInput.value.trim();
       if (text) {
-        tasks.unshift({ text, completed: false }); // Add to top
+        tasks.unshift({ text, completed: false });
         taskInput.value = '';
         renderTasks();
       }
@@ -115,8 +123,10 @@
       renderTasks();
     }
 
-    // Enter key, focus on load
-    taskInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addTask(); });
+    taskInput.addEventListener('keypress', (e) => { 
+      if (e.key === 'Enter') addTask(); 
+    });
+
     window.addEventListener('load', () => {
       taskInput.focus();
       renderTasks();
