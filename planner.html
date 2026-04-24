@@ -13,7 +13,7 @@
   <meta name="apple-mobile-web-app-title" content="Planner">
   <link rel="apple-touch-icon" href="./icon-512.png">
 
-  <!-- Service Worker Registration -->
+  <!-- Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -136,31 +136,47 @@
 
     .input-row {
       display: flex;
+      flex-direction: column;
       gap: 8px;
     }
 
-    .input-row input {
+    .top-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .top-row input[type="text"] {
       flex: 1;
-      padding: 10px 11px;
+    }
+
+    input[type="text"],
+    input[type="date"] {
+      padding: 9px 11px;
       border-radius: var(--radius-sm);
       border: 1px solid rgba(148, 163, 184, 0.35);
       background: rgba(15, 23, 42, 0.9);
       color: var(--text-main);
       font-size: 0.9rem;
       outline: none;
+      width: 100%;
     }
 
-    .input-row input::placeholder {
+    input::placeholder {
       color: rgba(148, 163, 184, 0.85);
     }
 
-    .input-row input:focus {
+    input:focus {
       border-color: rgba(129, 140, 248, 0.9);
       box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.75);
     }
 
+    input[type="date"] {
+      font-size: 0.8rem;
+      color-scheme: dark;
+    }
+
     .add-btn {
-      padding: 0 12px;
+      padding: 9px 12px;
       border-radius: var(--radius-sm);
       border: none;
       background: linear-gradient(135deg, #4f46e5, #7c3aed);
@@ -216,6 +232,7 @@
       overflow-y: auto;
       scrollbar-width: thin;
       scrollbar-color: rgba(55, 65, 81, 0.9) transparent;
+      padding-bottom: 4px;
     }
 
     .list-card::-webkit-scrollbar {
@@ -224,6 +241,26 @@
     .list-card::-webkit-scrollbar-thumb {
       background: rgba(55, 65, 81, 0.9);
       border-radius: 999px;
+    }
+
+    .section {
+      padding-top: 6px;
+    }
+
+    .section-header {
+      padding: 8px 12px 4px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-soft);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .section-header span:last-child {
+      font-size: 0.7rem;
+      color: rgba(156, 163, 175, 0.85);
     }
 
     ul {
@@ -235,8 +272,19 @@
       justify-content: space-between;
       align-items: center;
       gap: 10px;
-      padding: 11px 12px;
+      padding: 9px 12px;
       border-bottom: 1px solid rgba(55, 65, 81, 0.7);
+    }
+
+    .section ul:empty + .section-empty {
+      display: block;
+    }
+
+    .section-empty {
+      display: none;
+      padding: 4px 12px 10px;
+      font-size: 0.78rem;
+      color: rgba(148, 163, 184, 0.9);
     }
 
     li:last-child {
@@ -246,8 +294,14 @@
     .task-main {
       flex: 1;
       display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .task-top-row {
+      display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 8px;
     }
 
     .status-dot {
@@ -256,6 +310,7 @@
       border-radius: 999px;
       box-shadow: 0 0 0 4px rgba(34, 197, 94, 0);
       transition: all 0.18s ease;
+      flex-shrink: 0;
     }
 
     .status-dot.active {
@@ -277,6 +332,19 @@
     .task-text.completed {
       text-decoration: line-through;
       color: rgba(156, 163, 175, 0.85);
+    }
+
+    .task-date {
+      font-size: 0.75rem;
+      color: var(--text-soft);
+    }
+
+    .task-date.overdue {
+      color: #fecaca;
+    }
+
+    .task-date.soon {
+      color: #facc15;
     }
 
     .task-controls {
@@ -321,12 +389,11 @@
         border-radius: 20px;
         padding: 14px 12px 16px;
       }
-      .input-row {
+      .top-row {
         flex-direction: column;
       }
       .add-btn {
         width: 100%;
-        padding: 9px 0;
       }
     }
   </style>
@@ -340,7 +407,7 @@
             <div class="app-dot"></div>
             <h1>Homework planner</h1>
           </div>
-          <span class="subtitle">Keep tonight’s assignments in one clean view.</span>
+          <span class="subtitle">Type the assignment, pick the due date, done.</span>
         </div>
         <div class="pill">PWA • offline ready</div>
       </header>
@@ -348,44 +415,119 @@
       <section class="input-card">
         <div class="input-label">New task</div>
         <div class="input-row">
-          <input id="taskInput" placeholder="Ex: Math p.42 #2–12 (due Fri)" />
-          <button class="add-btn" onclick="addTask()">Add</button>
+          <div class="top-row">
+            <input id="taskInput" type="text" placeholder="Ex: Math p.42 #2–12" />
+            <button class="add-btn" onclick="addTask()">Add</button>
+          </div>
+          <input id="dueInput" type="date" />
         </div>
       </section>
 
       <div class="meta-row">
         <div class="meta-left">
-          <span id="taskCount" class="meta-em">0</span> tasks • tap “Done” when finished.
+          <span id="taskCount" class="meta-em">0</span> total • grouped by date.
         </div>
         <button class="clear-btn" onclick="clearCompleted()">Clear done</button>
       </div>
 
       <section class="list-card">
-        <ul id="taskList"></ul>
+        <!-- Today -->
+        <div class="section" id="section-today">
+          <div class="section-header">
+            <span>Today</span>
+            <span id="todayCount">0</span>
+          </div>
+          <ul id="list-today"></ul>
+          <div class="section-empty">No tasks for today.</div>
+        </div>
+
+        <!-- Tomorrow -->
+        <div class="section" id="section-tomorrow">
+          <div class="section-header">
+            <span>Tomorrow</span>
+            <span id="tomorrowCount">0</span>
+          </div>
+          <ul id="list-tomorrow"></ul>
+          <div class="section-empty">Nothing due tomorrow yet.</div>
+        </div>
+
+        <!-- Upcoming -->
+        <div class="section" id="section-upcoming">
+          <div class="section-header">
+            <span>Upcoming</span>
+            <span id="upcomingCount">0</span>
+          </div>
+          <ul id="list-upcoming"></ul>
+          <div class="section-empty">No upcoming tasks.</div>
+        </div>
       </section>
 
-      <p class="footer-hint">Tip: Install to your home screen for a true app feel.</p>
+      <p class="footer-hint">Tip: leave date blank for “sometime soon” – it will land in Upcoming.</p>
     </div>
   </div>
 
   <script>
-    let tasks = JSON.parse(localStorage.getItem('planner-tasks')) || [];
-    const taskList = document.getElementById('taskList');
+    let tasks = JSON.parse(localStorage.getItem('planner-tasks-v2')) || [];
     const taskInput = document.getElementById('taskInput');
+    const dueInput = document.getElementById('dueInput');
     const taskCount = document.getElementById('taskCount');
 
-    function updateCount() {
-      taskCount.textContent = tasks.length;
+    const todayList = document.getElementById('list-today');
+    const tomorrowList = document.getElementById('list-tomorrow');
+    const upcomingList = document.getElementById('list-upcoming');
+    const todayCount = document.getElementById('todayCount');
+    const tomorrowCount = document.getElementById('tomorrowCount');
+    const upcomingCount = document.getElementById('upcomingCount');
+
+    function toDateOnlyString(date) {
+      return date.toISOString().slice(0, 10);
+    }
+
+    function getTodayTomorrow() {
+      const now = new Date();
+      const todayStr = toDateOnlyString(now);
+      const tomorrow = new Date(now);
+      tomorrow.setDate(now.getDate() + 1);
+      const tomorrowStr = toDateOnlyString(tomorrow);
+      return { todayStr, tomorrowStr };
+    }
+
+    function getDateBadge(taskDateStr) {
+      if (!taskDateStr) return { label: 'No date', className: '' };
+
+      const { todayStr, tomorrowStr } = getTodayTomorrow();
+      const today = new Date(todayStr);
+      const due = new Date(taskDateStr);
+      const diffDays = Math.round((due - today) / (1000 * 60 * 60 * 24));
+
+      if (taskDateStr === todayStr) return { label: 'Due today', className: 'soon' };
+      if (taskDateStr === tomorrowStr) return { label: 'Due tomorrow', className: 'soon' };
+      if (diffDays < 0) return { label: 'Past due', className: 'overdue' };
+      return { label: `Due ${taskDateStr}`, className: '' };
     }
 
     function renderTasks() {
-      taskList.innerHTML = '';
+      todayList.innerHTML = '';
+      tomorrowList.innerHTML = '';
+      upcomingList.innerHTML = '';
+
+      const { todayStr, tomorrowStr } = getTodayTomorrow();
+
+      let todayNum = 0, tomorrowNum = 0, upcomingNum = 0;
+
       tasks.forEach((task, index) => {
         const li = document.createElement('li');
+
+        const badge = getDateBadge(task.due || null);
+        const statusClass = task.completed ? 'inactive' : 'active';
+
         li.innerHTML = `
           <div class="task-main">
-            <span class="status-dot ${task.completed ? 'inactive' : 'active'}"></span>
-            <span class="task-text ${task.completed ? 'completed' : ''}">${task.text}</span>
+            <div class="task-top-row">
+              <span class="status-dot ${statusClass}"></span>
+              <span class="task-text ${task.completed ? 'completed' : ''}">${task.text}</span>
+            </div>
+            <span class="task-date ${badge.className}">${badge.label}</span>
           </div>
           <div class="task-controls">
             <label>
@@ -395,17 +537,37 @@
             <button class="delete-btn" onclick="deleteTask(${index})">✕</button>
           </div>
         `;
-        taskList.appendChild(li);
+
+        const due = task.due || null;
+
+        if (due === todayStr) {
+          todayList.appendChild(li);
+          todayNum++;
+        } else if (due === tomorrowStr) {
+          tomorrowList.appendChild(li);
+          tomorrowNum++;
+        } else {
+          upcomingList.appendChild(li);
+          upcomingNum++;
+        }
       });
-      localStorage.setItem('planner-tasks', JSON.stringify(tasks));
-      updateCount();
+
+      taskCount.textContent = tasks.length;
+      todayCount.textContent = todayNum;
+      tomorrowCount.textContent = tomorrowNum;
+      upcomingCount.textContent = upcomingNum;
+
+      localStorage.setItem('planner-tasks-v2', JSON.stringify(tasks));
     }
 
     function addTask() {
       const text = taskInput.value.trim();
+      const due = dueInput.value.trim(); // yyyy-mm-dd or empty
+
       if (text) {
-        tasks.unshift({ text, completed: false });
+        tasks.unshift({ text, completed: false, due: due || null });
         taskInput.value = '';
+        dueInput.value = '';
         renderTasks();
       }
     }
