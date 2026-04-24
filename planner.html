@@ -1,1 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homework Planner</title>
+  <!-- PWA Manifest & Service Worker -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4a90e2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Planner">
+  <link rel="apple-touch-icon" href="icon-512.png">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('SW registered'))
+          .catch(err => console.log('SW failed'));
+      });
+    }
+  </script>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      max-width: 500px; 
+      margin: 0 auto; 
+      padding: 20px; 
+      background: #222; 
+      color: #fff; 
+      min-height: 100vh;
+    }
+    h1 { text-align: center; }
+    input, button { 
+      padding: 10px; 
+      margin: 5px 0; 
+      width: 100%; 
+      box-sizing: border-box;
+    }
+    button { 
+      background: #4a90e2; 
+      color: white; 
+      border: none; 
+      cursor: pointer; 
+      font-size: 16px;
+    }
+    button:hover { background: #357abd; }
+    ul { list-style: none; padding: 0; }
+    li { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+      padding: 15px; 
+      border-bottom: 1px solid #444; 
+    }
+    .completed { 
+      text-decoration: line-through; 
+      opacity: 0.6; 
+    }
+    .delete-btn { background: #ff6b6b; width: auto; padding: 5px 10px; }
+    .clear-btn { background: #ffaa00; }
+    @media (max-width: 480px) { body { padding: 10px; } }
+  </style>
+</head>
+<body>
+  <h1>📚 Homework Planner</h1>
+  <input id="taskInput" placeholder="e.g., Math p42 due Fri" />
+  <button onclick="addTask()">Add Task</button>
+  <ul id="taskList"></ul>
+  <button class="clear-btn" onclick="clearCompleted()">Clear Done</button>
+  <p style="text-align: center; font-size: 14px; opacity: 0.7;">PWA ready—install for offline use!</p>
 
+  <script>
+    let tasks = JSON.parse(localStorage.getItem('planner-tasks')) || [];
+    const taskList = document.getElementById('taskList');
+    const taskInput = document.getElementById('taskInput');
+
+    function renderTasks() {
+      taskList.innerHTML = '';
+      tasks.forEach((task, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <span class="${task.completed ? 'completed' : ''}">${task.text}</span>
+          <div>
+            <label><input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${index})"> Done</label>
+            <button class="delete-btn" onclick="deleteTask(${index})">🗑️</button>
+          </div>
+        `;
+        taskList.appendChild(li);
+      });
+      localStorage.setItem('planner-tasks', JSON.stringify(tasks));
+    }
+
+    function addTask() {
+      const text = taskInput.value.trim();
+      if (text) {
+        tasks.unshift({ text, completed: false }); // Add to top
+        taskInput.value = '';
+        renderTasks();
+      }
+    }
+
+    function toggleTask(index) {
+      tasks[index].completed = !tasks[index].completed;
+      renderTasks();
+    }
+
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      renderTasks();
+    }
+
+    function clearCompleted() {
+      tasks = tasks.filter(task => !task.completed);
+      renderTasks();
+    }
+
+    // Enter key, focus on load
+    taskInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addTask(); });
+    window.addEventListener('load', () => {
+      taskInput.focus();
+      renderTasks();
+    });
+  </script>
+</body>
+</html>
