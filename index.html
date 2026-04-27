@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Theme + mobile behavior -->
-    <meta name="theme-color" content="#05060a" />
+    <meta name="theme-color" content="#f5f2ec" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta
       name="apple-mobile-web-app-status-bar-style"
@@ -14,57 +14,53 @@
     />
 
     <!-- Favicon / icons for all devices -->
-    <!-- Legacy + general fallback -->
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-
-    <!-- Modern browsers (PNG favicons) -->
+    <link rel="icon" href="/planner/favicon.ico" sizes="any" />
     <link
       rel="icon"
       type="image/png"
-      href="/favicon-16x16.png"
+      href="/planner/favicon-16x16.png"
       sizes="16x16"
     />
     <link
       rel="icon"
       type="image/png"
-      href="/favicon-32x32.png"
+      href="/planner/favicon-32x32.png"
       sizes="32x32"
     />
     <link
       rel="icon"
       type="image/png"
-      href="/favicon-48x48.png"
+      href="/planner/favicon-48x48.png"
       sizes="48x48"
     />
-
-    <!-- iOS home screen icon -->
     <link
       rel="apple-touch-icon"
-      href="/apple-touch-icon.png"
+      href="/planner/apple-touch-icon.png"
       sizes="180x180"
     />
-
-    <!-- PWA / Android install icons -->
     <link
       rel="icon"
       type="image/png"
-      href="/favicon-192x192.png"
+      href="/planner/favicon-192x192.png"
       sizes="192x192"
     />
     <link
       rel="icon"
       type="image/png"
-      href="/favicon-512x512.png"
+      href="/planner/favicon-512x512.png"
       sizes="512x512"
     />
 
     <!-- Web app manifest (PWA) -->
     <link rel="manifest" href="manifest.json" />
 
-    <!-- Windows tiles (optional but nice) -->
-    <meta name="msapplication-TileColor" content="#05060a" />
-    <meta name="msapplication-TileImage" content="/mstile-144x144.png" />
-    <meta name="msapplication-config" content="/browserconfig.xml" />
+    <!-- Windows tiles -->
+    <meta name="msapplication-TileColor" content="#f5f2ec" />
+    <meta
+      name="msapplication-TileImage"
+      content="/planner/mstile-144x144.png"
+    />
+    <meta name="msapplication-config" content="/planner/browserconfig.xml" />
 
     <link rel="stylesheet" href="planner.css" />
   </head>
@@ -74,12 +70,11 @@
         <!-- Top bar -->
         <header class="header">
           <div class="title-row">
-            <div class="app-dot"></div>
+            <!-- Optional logo mark (image handled in CSS) -->
+            <div class="logo-mark" aria-hidden="true"></div>
             <div>
               <h1>Complete Planner</h1>
-              <span class="subtitle">
-                Notebook-style homework and notes in one calm view.
-              </span>
+              <!-- Subtitle removed per request -->
             </div>
           </div>
 
@@ -91,11 +86,7 @@
               </button>
             </div>
 
-            <!-- Compact theme button visible on wider screens, mirrors settings -->
-            <button id="themeToggle" class="theme-toggle" type="button">
-              <span id="themeIcon">☾</span>
-              <span id="themeLabel">Dark</span>
-            </button>
+            <!-- Theme toggle removed from main header (only in sidebar now) -->
 
             <!-- Settings drawer toggle (always visible on mobile) -->
             <button
@@ -138,7 +129,9 @@
                   id="dueInput"
                   type="date"
                   class="task-date"
+                  aria-label="Due date"
                 />
+                <label for="dueInput" class="task-date-label">Due date</label>
                 <select id="classSelect" class="task-class-select">
                   <option value="">No class</option>
                 </select>
@@ -208,9 +201,7 @@
                 >
                   Clear completed
                 </button>
-                <span class="hint-text">
-                  Overdue tasks glow red so you can’t ignore them.
-                </span>
+                <!-- Overdue hint removed per request -->
               </div>
             </div>
           </section>
@@ -271,24 +262,12 @@
           </div>
         </div>
 
+        <!-- Date format chips removed; using date picker labeled 'Due date' -->
         <div class="settings-group">
-          <div class="settings-label">Date format</div>
-          <div class="settings-options">
-            <button
-              class="settings-chip"
-              data-date-format="mdy"
-              type="button"
-            >
-              m/d/yyyy
-            </button>
-            <button
-              class="settings-chip"
-              data-date-format="dmy"
-              type="button"
-            >
-              d/m/yyyy
-            </button>
-          </div>
+          <div class="settings-label">Due date format</div>
+          <p class="settings-note">
+            Dates use your browser’s date picker and locale.
+          </p>
         </div>
       </div>
     </aside>
