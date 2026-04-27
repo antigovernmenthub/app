@@ -2,109 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Homework Planner</title>
+  <title>Complete Planner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- PWA Manifest & Icons -->
-  <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#111827">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Planner">
-  <link rel="apple-touch-icon" href="./icon-512.png">
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="./planner.css">
-
-  <!-- Service Worker -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(() => {});
-      });
-    }
-  </script>
+  <link rel="stylesheet" href="planner.css">
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <div class="app">
-    <div class="shell">
-      <header class="header">
-        <div class="title-block">
-          <div class="title-row">
-            <div class="app-dot"></div>
-            <h1>Homework planner</h1>
-          </div>
-          <span class="subtitle">Assignments, dates, and classes in one view.</span>
-        </div>
-        <div class="header-right">
-          <button class="theme-toggle" id="themeToggle">
-            <span id="themeIcon">☾</span>
-            <span id="themeLabel">Dark</span>
-          </button>
-          <div class="pill">PWA • offline ready</div>
-        </div>
-      </header>
+  <!-- your existing planner HTML content here -->
 
-      <section class="input-card">
-        <div class="input-label">New task</div>
-        <div class="input-row">
-          <div class="top-row">
-            <input id="taskInput" type="text" placeholder="Ex: Math p.42 #2–12" />
-            <button class="add-btn" onclick="addTask()">Add</button>
-          </div>
-          <input id="dueInput" type="date" />
-          <div class="class-bar">
-            <div class="class-chips" id="classChips"></div>
-            <div class="class-add-row">
-              <input id="classInput" class="class-input" type="text" placeholder="Add a class (Algebra, English...)" />
-              <button class="class-add-btn" onclick="addClass()">+ Add class</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div class="meta-row">
-        <div class="meta-left">
-          <span id="taskCount" class="meta-em">0</span> total • grouped by date.
-        </div>
-        <button class="clear-btn" onclick="clearCompleted()">Clear done</button>
-      </div>
-
-      <section class="list-card">
-        <div class="section" id="section-today">
-          <div class="section-header">
-            <span>Today</span>
-            <span id="todayCount">0</span>
-          </div>
-          <ul id="list-today"></ul>
-          <div class="section-empty">No tasks for today.</div>
-        </div>
-
-        <div class="section" id="section-tomorrow">
-          <div class="section-header">
-            <span>Tomorrow</span>
-            <span id="tomorrowCount">0</span>
-          </div>
-          <ul id="list-tomorrow"></ul>
-          <div class="section-empty">Nothing due tomorrow yet.</div>
-        </div>
-
-        <div class="section" id="section-upcoming">
-          <div class="section-header">
-            <span>Upcoming / No date</span>
-            <span id="upcomingCount">0</span>
-          </div>
-          <ul id="list-upcoming"></ul>
-          <div class="section-empty">No upcoming tasks.</div>
-        </div>
-      </section>
-
-      <p class="footer-hint">
-        Overdue tasks glow red so you can’t ignore them. Allow notifications for daily reminders.
-      </p>
-    </div>
-  </div>
-
-  <script src="./planner.js"></script>
+  <script src="planner.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("sw.js")
+        .catch((err) => console.error("SW registration failed", err));
+    }
+  </script>
 </body>
 </html>
