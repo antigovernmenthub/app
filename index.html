@@ -5,18 +5,36 @@
   <title>Complete Planner</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <!-- Styles -->
   <link rel="stylesheet" href="planner.css">
   <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#05060a">
 </head>
 <body>
-  <!-- your existing planner HTML content here -->
+  <div class="app">
+    <header class="app-header">
+      <h1 class="app-title">Complete Planner</h1>
+      <p class="app-subtitle">A calm place to keep track of your homework.</p>
+    </header>
 
+    <!-- MAIN APP -->
+    <main id="planner-root">
+      <!-- Put your existing planner UI here:
+           input for new assignment, list of tasks, etc. -->
+    </main>
+
+    <footer class="app-footer">
+      <p>Built with Complete. Keep your school life in one place.</p>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
   <script src="planner.js"></script>
   <script>
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("sw.js")
-        .catch((err) => console.error("SW registration failed", err));
+      navigator.serviceWorker.register("sw.js").catch((err) => {
+        console.error("Service worker registration failed", err);
+      });
     }
   </script>
 </body>
