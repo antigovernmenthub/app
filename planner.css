@@ -1,19 +1,5 @@
 :root {
-  --bg: #05060a;
-  --bg-elevated: #10121a;
-  --bg-lighter: #1a1c27;
-  --paper: #161821;
-  --line: rgba(255, 255, 255, 0.04);
-  --text: #f4f3ef;
-  --muted: #b7b3aa;
-  --accent: #4fd0ff;
-  --accent-soft: rgba(79, 208, 255, 0.12);
-  --danger: #ff4f6a;
-  --radius: 16px;
-}
-
-/* Theme toggle (light) */
-html.light {
+  /* Light theme is default */
   --bg: #f5f2ec;
   --bg-elevated: #ffffff;
   --bg-lighter: #ece4d8;
@@ -21,6 +7,21 @@ html.light {
   --line: rgba(0, 0, 0, 0.06);
   --text: #28231d;
   --muted: #756c61;
+  --accent: #4f7fff;
+  --accent-soft: rgba(79, 127, 255, 0.12);
+  --danger: #c62828;
+  --radius: 16px;
+}
+
+/* Dark theme when explicit */
+html.dark {
+  --bg: #05060a;
+  --bg-elevated: #10121a;
+  --bg-lighter: #1a1c27;
+  --paper: #161821;
+  --line: rgba(255, 255, 255, 0.04);
+  --text: #f4f3ef;
+  --muted: #b7b3aa;
 }
 
 /* Base */
@@ -38,27 +39,34 @@ body {
 
 body {
   min-height: 100vh;
-  background: radial-gradient(circle at top, #151827 0, #05060a 55%);
+  background: var(--bg);
   color: var(--text);
   font-family: "Sabon", "Garamond", "Georgia", serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
 }
 
 /* App shell */
 .app {
   width: 100%;
-  max-width: 1120px;
 }
 
 .shell {
-  background: rgba(5, 6, 10, 0.85);
-  border-radius: 32px;
-  padding: 20px 20px 18px;
-  border: 1px solid rgba(79, 208, 255, 0.12);
-  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.7);
+  max-width: 1120px;
+  margin: 0 auto;
+  background: var(--bg-elevated);
+  border-radius: 0;
+  padding: 12px 12px 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+@media (min-width: 768px) {
+  .shell {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    border-radius: 24px;
+    padding: 18px 20px 18px;
+    box-shadow: 0 14px 50px rgba(0, 0, 0, 0.14);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
 }
 
 /* Header */
@@ -76,26 +84,29 @@ body {
   gap: 10px;
 }
 
+/* Logo mark – uses background image if you set one */
+.logo-mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: url("logo.png") center/contain no-repeat,
+    linear-gradient(135deg, #4f7fff, #9f7fff);
+}
+
+/* Remove old glowing dot */
 .app-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  background: var(--accent);
-  box-shadow: 0 0 10px rgba(79, 208, 255, 0.9);
+  display: none;
 }
 
 .header h1 {
   margin: 0;
-  font-size: 1.5rem;
-  letter-spacing: 0.08em;
+  font-size: 1.3rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 .subtitle {
-  display: block;
-  margin-top: 4px;
-  font-size: 0.9rem;
-  color: var(--muted);
+  display: none; /* removed per request */
 }
 
 .header-right {
@@ -109,31 +120,6 @@ body {
   align-items: center;
 }
 
-/* Theme toggle chip in header */
-.theme-toggle {
-  border-radius: 999px;
-  border: 1px solid rgba(180, 176, 166, 0.5);
-  background: transparent;
-  color: var(--text);
-  padding: 6px 10px;
-  font-size: 0.8rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-}
-
-/* Settings icon button */
-.settings-toggle {
-  border-radius: 999px;
-  border: 1px solid rgba(180, 176, 166, 0.5);
-  background: transparent;
-  color: var(--text);
-  padding: 6px 10px;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-
 /* Auth UI */
 .user-label {
   font-size: 0.8rem;
@@ -143,12 +129,23 @@ body {
 
 .auth-btn {
   border-radius: 999px;
-  border: 1px solid rgba(180, 176, 166, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.12);
   background: transparent;
   color: var(--text);
   padding: 6px 10px;
   font-size: 0.8rem;
   margin-left: 8px;
+  cursor: pointer;
+}
+
+/* Settings icon button */
+.settings-toggle {
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: transparent;
+  color: var(--text);
+  padding: 6px 10px;
+  font-size: 0.9rem;
   cursor: pointer;
 }
 
@@ -159,8 +156,8 @@ body {
   width: 280px;
   max-width: 80%;
   background: var(--bg-elevated);
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: -18px 0 50px rgba(0, 0, 0, 0.6);
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: -18px 0 50px rgba(0, 0, 0, 0.3);
   transform: translateX(100%);
   transition: transform 0.24s ease-out;
   z-index: 40;
@@ -194,7 +191,7 @@ body {
 
 .settings-close {
   border-radius: 999px;
-  border: 1px solid rgba(180, 176, 166, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.14);
   background: transparent;
   color: var(--text);
   padding: 4px 9px;
@@ -206,7 +203,7 @@ body {
 .settings-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.35);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease-out;
@@ -222,7 +219,7 @@ body {
 .settings-group {
   border-radius: 18px;
   padding: 10px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   background: var(--paper);
 }
 
@@ -242,7 +239,7 @@ body {
 
 .settings-chip {
   border-radius: 999px;
-  border: 1px solid rgba(180, 176, 166, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.16);
   background: transparent;
   color: var(--text);
   font-size: 0.8rem;
@@ -255,10 +252,17 @@ body {
   background: var(--accent-soft);
 }
 
+.settings-note {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 0;
+}
+
 /* Layout */
 .main-layout {
   display: grid;
   gap: 16px;
+  padding-top: 4px;
 }
 
 @media (min-width: 880px) {
@@ -281,8 +285,8 @@ body {
   background: linear-gradient(
     to bottom,
     transparent 0,
-    rgba(0, 0, 0, 0.6) 14%,
-    rgba(0, 0, 0, 0.6) 86%,
+    rgba(0, 0, 0, 0.06) 14%,
+    rgba(0, 0, 0, 0.06) 86%,
     transparent 100%
   );
   border-radius: 999px;
@@ -293,7 +297,7 @@ body {
   background: var(--paper);
   border-radius: 24px;
   padding: 16px 16px 12px 32px;
-  border: 1px solid rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   position: relative;
   overflow: hidden;
 }
@@ -305,7 +309,7 @@ body {
   top: 0;
   bottom: 0;
   width: 1px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.06);
 }
 
 .notebook-inner::after {
@@ -364,7 +368,8 @@ body {
 /* Task input row */
 .task-input-row {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) auto auto auto;
+  grid-template-columns: minmax(0, 1.5fr) auto auto;
+  grid-template-rows: auto auto;
   gap: 6px;
   margin-bottom: 8px;
 }
@@ -373,8 +378,8 @@ body {
 .task-date,
 .task-class-select {
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.02);
   color: var(--text);
   font-size: 0.9rem;
   padding: 8px 10px;
@@ -383,11 +388,17 @@ body {
 
 .task-input::placeholder,
 .class-input::placeholder {
-  color: rgba(183, 179, 170, 0.9);
+  color: rgba(117, 108, 97, 0.9);
 }
 
 .task-date {
   min-width: 120px;
+}
+
+.task-date-label {
+  align-self: center;
+  font-size: 0.8rem;
+  color: var(--muted);
 }
 
 .task-class-select {
@@ -398,7 +409,7 @@ body {
   border-radius: 999px;
   border: none;
   background: var(--accent);
-  color: #020308;
+  color: #ffffff;
   padding: 8px 16px;
   font-size: 0.9rem;
   font-weight: 600;
@@ -421,10 +432,10 @@ body {
 
 .class-chip {
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(0, 0, 0, 0.16);
   font-size: 0.75rem;
   padding: 4px 9px;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.02);
   color: var(--text);
   cursor: pointer;
 }
@@ -442,8 +453,8 @@ body {
 .class-input {
   flex: 1;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.02);
   color: var(--text);
   font-size: 0.85rem;
   padding: 7px 10px;
@@ -452,7 +463,7 @@ body {
 
 .class-add-btn {
   border-radius: 999px;
-  border: 1px solid rgba(180, 176, 166, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.14);
   background: transparent;
   color: var(--text);
   padding: 7px 12px;
@@ -467,7 +478,7 @@ body {
 }
 
 .section {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.02);
   border-radius: 16px;
   padding: 8px 10px;
 }
@@ -539,13 +550,13 @@ body {
 .task-class {
   padding: 2px 7px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .task-due {
   padding: 2px 7px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .task--done .task-text {
@@ -561,14 +572,14 @@ body {
 .notebook-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-top: 6px;
   gap: 8px;
 }
 
 .clear-btn {
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.2);
   background: transparent;
   color: var(--muted);
   padding: 5px 10px;
@@ -577,8 +588,7 @@ body {
 }
 
 .hint-text {
-  font-size: 0.78rem;
-  color: var(--muted);
+  display: none; /* removed */
 }
 
 /* Notes panel */
@@ -586,7 +596,7 @@ body {
   background: var(--bg-elevated);
   border-radius: 24px;
   padding: 14px 14px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -613,7 +623,7 @@ body {
   flex: 1;
   min-height: 180px;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.12);
   background: var(--bg-lighter);
   color: var(--text);
   padding: 8px 10px;
@@ -629,28 +639,20 @@ body {
 
 /* Responsive */
 @media (max-width: 720px) {
-  body {
-    padding: 10px;
-  }
-
   .shell {
-    padding: 14px;
-    border-radius: 24px;
+    padding: 12px 10px 14px;
+    border-radius: 0;
+    box-shadow: none;
   }
 
   .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
   }
 
   .header-right {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .theme-toggle {
-    display: none; /* Rely on settings drawer on small screens */
+    margin-left: auto;
   }
 
   .main-layout {
@@ -663,21 +665,6 @@ body {
 
   .notebook-rings {
     display: none;
-  }
-
-  .task-input-row {
-    grid-template-columns: minmax(0, 1.6fr) auto;
-    grid-template-rows: auto auto;
-  }
-
-  .task-date,
-  .task-class-select {
-    grid-column: 1 / 2;
-  }
-
-  .add-btn {
-    grid-row: 1 / 3;
-    align-self: stretch;
   }
 
   .notes-panel {
