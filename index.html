@@ -4,7 +4,68 @@
     <meta charset="UTF-8" />
     <title>Complete Planner</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Theme + mobile behavior -->
+    <meta name="theme-color" content="#05060a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <!-- Favicon / icons for all devices -->
+    <!-- Legacy + general fallback -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+
+    <!-- Modern browsers (PNG favicons) -->
+    <link
+      rel="icon"
+      type="image/png"
+      href="/favicon-16x16.png"
+      sizes="16x16"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/favicon-32x32.png"
+      sizes="32x32"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/favicon-48x48.png"
+      sizes="48x48"
+    />
+
+    <!-- iOS home screen icon -->
+    <link
+      rel="apple-touch-icon"
+      href="/apple-touch-icon.png"
+      sizes="180x180"
+    />
+
+    <!-- PWA / Android install icons -->
+    <link
+      rel="icon"
+      type="image/png"
+      href="/favicon-192x192.png"
+      sizes="192x192"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/favicon-512x512.png"
+      sizes="512x512"
+    />
+
+    <!-- Web app manifest (PWA) -->
     <link rel="manifest" href="manifest.json" />
+
+    <!-- Windows tiles (optional but nice) -->
+    <meta name="msapplication-TileColor" content="#05060a" />
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+
     <link rel="stylesheet" href="planner.css" />
   </head>
   <body>
@@ -37,7 +98,12 @@
             </button>
 
             <!-- Settings drawer toggle (always visible on mobile) -->
-            <button id="settingsToggle" class="settings-toggle" type="button" aria-label="Open settings">
+            <button
+              id="settingsToggle"
+              class="settings-toggle"
+              type="button"
+              aria-label="Open settings"
+            >
               ☰
             </button>
           </div>
